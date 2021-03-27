@@ -45,7 +45,7 @@ class NumberListFragment : Fragment(R.layout.number_list_fragment) {
     }
 
     private fun fillNumberList(numbers: List<Int>) {
-        numberAdapter.updateNumbers(numbers)
+        numberAdapter.updateNumbers(numbers.size)
         numberAdapter.notifyDataSetChanged()
     }
 

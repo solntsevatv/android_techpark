@@ -1,6 +1,7 @@
 package com.example.tp_homework
 
 import android.graphics.Color
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -8,8 +9,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 
 class NumberAdapter : RecyclerView.Adapter<NumberAdapter.NumberViewHolder>() {
-    private var numbers: List<Int> = emptyList()
-
+    private var numbers: MutableList<Int> = mutableListOf()
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NumberViewHolder {
         val view: View =
             LayoutInflater.from(parent.context).inflate(R.layout.number_item, parent, false)
@@ -25,8 +25,9 @@ class NumberAdapter : RecyclerView.Adapter<NumberAdapter.NumberViewHolder>() {
        return numbers.size
     }
 
-    fun updateNumbers(numbers: List<Int>) {
-        this.numbers = numbers
+    fun updateNumbers(newNumbersSize: Int) {
+        for (i in (numbers.size + 1)..newNumbersSize)
+            numbers.add(i)
     }
 
     class NumberViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
