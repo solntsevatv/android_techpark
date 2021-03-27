@@ -18,6 +18,7 @@
         android:src="@drawable/ic_plus"
         android:background="@color/button_red"
         android:backgroundTint="@color/button_red"
+        app:backgroundTint="@color/white"
         app:rippleColor="#000000"
         />
 

@@ -1,6 +1,5 @@
 package com.example.tp_homework
 
-import android.content.res.Configuration
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
@@ -8,47 +7,31 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 
-
-class NumberListFragment() : Fragment(com.example.tp_homework.R.layout.number_list_fragment) {
-    private val ARRAY_STATE: String = "state"
-    private var numbers: ArrayList<Int> = ArrayList()
-    private val spanNumber: Int
-        get() {
-            return if (resources.configuration.orientation == Configuration.ORIENTATION_PORTRAIT)
-                3
-            else
-                4
-        }
-
-    var numberAdapter: NumberAdapter = NumberAdapter()
+class NumberListFragment : Fragment(R.layout.number_list_fragment) {
+    companion object {
+        private const val ARRAY_SIZE_STATE: String = "state"
+    }
+    private var numbers: ArrayList<Int> = ArrayList(110)
+    private var numberAdapter: NumberAdapter = NumberAdapter()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         if (savedInstanceState != null) {
-            numbers = savedInstanceState.getIntegerArrayList(ARRAY_STATE) as ArrayList<Int>
+            initNumbers(savedInstanceState.getInt(ARRAY_SIZE_STATE))
         }
-            val recyclerView = view.findViewById<RecyclerView>(com.example.tp_homework.R.id.numbers_list)
-            recyclerView.layoutManager = GridLayoutManager(this.context, spanNumber)
-            recyclerView.setItemViewCacheSize(20)
-            recyclerView.adapter = numberAdapter
+        else initNumbers(if (numbers.size == 0) 100 else numbers.size)
 
-            initNumbers(if (numbers.size == 0) 100 else numbers.size)
-            fillNumberList(numbers)
+        view.findViewById<RecyclerView>(R.id.numbers_list).let {
+            it.layoutManager = GridLayoutManager(this.context, resources.getInteger(R.integer.span_number))
+            it.setItemViewCacheSize(20)
+            it.adapter = numberAdapter
+        }
 
+        fillNumberList(numbers)
 
-            val fab = view.findViewById<FloatingActionButton>(com.example.tp_homework.R.id.fab)
-            fab.setOnClickListener {
-                addNumber()
-            }
-    }
-
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-        outState.putIntegerArrayList(ARRAY_STATE, numbers)
-    }
-
-    private fun fillNumberList(numbers: List<Int>) {
-        numberAdapter.updateNumbers(numbers)
-        numberAdapter.notifyDataSetChanged() // bad for now
+        val fab = view.findViewById<FloatingActionButton>(com.example.tp_homework.R.id.fab)
+        fab.setOnClickListener {
+            addNumber()
+        }
     }
 
     private fun initNumbers(count: Int) {
@@ -56,13 +39,19 @@ class NumberListFragment() : Fragment(com.example.tp_homework.R.layout.number_li
         for (i in 1..count) numbers.add(i)
     }
 
-    fun addNumber() {
-        numbers.add(numbers.size + 1)
-        fillNumberList(numbers)
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putInt(ARRAY_SIZE_STATE, numbers.size)
     }
 
-    init {
-        numberAdapter = NumberAdapter()
+    private fun fillNumberList(numbers: List<Int>) {
+        numberAdapter.updateNumbers(numbers)
+        numberAdapter.notifyDataSetChanged()
+    }
+
+    private fun addNumber() {
+        numbers.add(numbers.size + 1)
+        fillNumberList(numbers)
     }
 }
 

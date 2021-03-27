@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <integer
+    name="span_number"
+    >4</integer>
+</resources>
